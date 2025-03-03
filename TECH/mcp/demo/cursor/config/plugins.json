@@ -1,0 +1,16 @@
+{
+  "enabled_plugins": [
+    "weather_mcp_server"
+  ],
+  "plugin_settings": {
+    "weather_mcp_server": {
+      "server": {
+        "host": "localhost",
+        "port": 8080
+      },
+      "weather_api": {
+        "key": "your_api_key_here"
+      }
+    }
+  }
+} 

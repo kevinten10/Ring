@@ -1,0 +1,35 @@
+name: weather_mcp
+version: "1.0"
+description: "Weather query MCP script"
+
+model:
+  name: claude-3
+  temperature: 0.7
+  max_tokens: 1000
+
+rules:
+  context:
+    max_length: 2000
+    priority_rules:
+      - weather_data: high
+      - user_query: high
+      - conversation: medium
+  
+  prompt:
+    templates:
+      - role: assistant
+        content: "You are a helpful weather assistant..."
+    
+  response:
+    format: markdown
+    style: concise
+    elements:
+      - temperature
+      - condition
+      - humidity
+      - wind_speed
+
+error_handling:
+  max_retries: 3
+  timeout: 10
+  fallback: "Unable to fetch weather data. Please try again later." 

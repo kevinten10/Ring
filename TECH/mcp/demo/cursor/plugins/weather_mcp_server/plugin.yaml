@@ -1,0 +1,25 @@
+name: weather_mcp_server
+version: 1.0.0
+description: Weather MCP Server Plugin for Cursor
+author: Your Name
+license: MIT
+
+main: __init__.py
+api_version: 1.0
+
+commands:
+  - name: weather.query
+    description: Query weather information
+    usage: weather.query <location>
+
+dependencies:
+  - aiohttp>=3.8.0
+  - requests>=2.26.0
+
+config:
+  server:
+    host: localhost
+    port: 8080
+  weather_api:
+    base_url: https://api.weatherapi.com/v1
+    timeout: 10 
