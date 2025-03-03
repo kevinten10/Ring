@@ -1,0 +1,8 @@
+weather:
+  api-key: your_api_key_here
+  api-url: https://api.weatherapi.com/v1
+  max-retries: 3
+  timeout: 10
+
+mcp:
+  rules-path: classpath:mcp/weather-rules.yml 
