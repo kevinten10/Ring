@@ -1,0 +1,1992 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>冥想 iOS App 原型</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f7;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1e1e1e;
+        }
+        
+        h2 {
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            color: #333;
+        }
+        
+        h3 {
+            margin: 25px 0 15px;
+            color: #555;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .screens-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .screen {
+            width: 320px;
+            height: 690px;
+            background-color: white;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            border: 10px solid #1e1e1e;
+            border-width: 10px 4px;
+        }
+        
+        .screen-content {
+            height: 100%;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .screen-title {
+            text-align: center;
+            font-size: 14px;
+            padding: 10px;
+            background-color: #f8f8f8;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 15px;
+            font-size: 12px;
+            background-color: #fff;
+            color: #333;
+        }
+        
+        .tab-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            background-color: #fff;
+            border-top: 1px solid #eee;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+        }
+        
+        .tab-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #ddd;
+            border-radius: 50%;
+            margin-bottom: 5px;
+        }
+        
+        .active .tab-icon {
+            background-color: #7c69ef;
+        }
+        
+        .active {
+            color: #7c69ef;
+        }
+        
+        .content {
+            padding: 15px;
+            padding-bottom: 70px;
+        }
+        
+        .hero-banner {
+            height: 150px;
+            background: linear-gradient(135deg, #7c69ef, #5d4adb);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/><circle cx="50" cy="50" r="20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>');
+            background-size: 100px;
+            opacity: 0.3;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .section-title h4 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .section-title a {
+            font-size: 12px;
+            color: #7c69ef;
+            text-decoration: none;
+        }
+        
+        .horizontal-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 5px 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .horizontal-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .meditation-item {
+            min-width: 140px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .meditation-img {
+            height: 80px;
+            background: linear-gradient(45deg, #7c69ef, #5d4adb);
+        }
+        
+        .meditation-info {
+            padding: 10px;
+            background-color: #f8f8f8;
+        }
+        
+        .meditation-title {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .meditation-meta {
+            font-size: 10px;
+            color: #777;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .category-item {
+            min-width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #7c69ef, #5d4adb);
+            color: white;
+        }
+        
+        .category-icon {
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        
+        .category-name {
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .stat-card {
+            background-color: #f8f8f8;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #7c69ef;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .streak-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 15px;
+        }
+        
+        .calendar-day {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            background-color: #f0f0f0;
+        }
+        
+        .calendar-day.active {
+            background-color: #7c69ef;
+            color: white;
+        }
+        
+        .list-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .list-item:last-child {
+            border-bottom: none;
+        }
+        
+        .list-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .list-content {
+            flex: 1;
+        }
+        
+        .list-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        
+        .list-subtitle {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .list-action {
+            color: #7c69ef;
+            font-size: 20px;
+        }
+        
+        .player-screen {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: linear-gradient(135deg, #7c69ef, #5d4adb);
+            color: white;
+        }
+        
+        .player-header {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .player-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .player-subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .player-image {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .player-controls {
+            padding: 20px;
+            margin-top: auto;
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .progress-fill {
+            position: absolute;
+            height: 100%;
+            width: 30%;
+            background-color: white;
+            border-radius: 2px;
+        }
+        
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .control-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .control-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .play-button {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        
+        .form-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #7c69ef;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .emotion-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .emotion-item {
+            background-color: #f8f8f8;
+            border-radius: 10px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .emotion-item.selected {
+            background-color: #7c69ef;
+            color: white;
+        }
+        
+        .emotion-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .emotion-label {
+            font-size: 12px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 24px;
+            transition: .4s;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .4s;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #7c69ef;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-label {
+            font-size: 14px;
+        }
+        
+        .achievement-card {
+            display: flex;
+            align-items: center;
+            background-color: #f8f8f8;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .achievement-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background-color: #7c69ef;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+        
+        .achievement-info {
+            flex: 1;
+        }
+        
+        .achievement-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .achievement-desc {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .onboarding-screen {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .onboarding-image {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            background-color: #f0f0f0;
+            border-radius: 20px;
+        }
+        
+        .onboarding-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .onboarding-desc {
+            font-size: 16px;
+            color: #777;
+            margin-bottom: 30px;
+        }
+        
+        .onboarding-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            background-color: #ddd;
+        }
+        
+        .dot.active {
+            width: 20px;
+            background-color: #7c69ef;
+        }
+        
+        .onboarding-buttons {
+            margin-top: auto;
+        }
+        
+        .secondary-button {
+            width: 100%;
+            padding: 15px;
+            background-color: transparent;
+            color: #7c69ef;
+            border: 1px solid #7c69ef;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>冥想 iOS App 原型</h1>
+        
+        <h2>产品概述</h2>
+        <p>「冥想」是一款专注于帮助用户培养冥想习惯、改善心理健康的 iOS 应用。通过提供个性化的冥想内容、进度追踪和社区支持，帮助用户在繁忙的生活中找到内心的平静。</p>
+        
+        <h2>核心功能</h2>
+        <ul>
+            <li>个性化冥想推荐</li>
+            <li>多种类型的引导式冥想</li>
+            <li>冥想习惯追踪与统计</li>
+            <li>基于情绪状态的内容推荐</li>
+            <li>睡眠改善专区</li>
+            <li>定制化提醒</li>
+            <li>成就系统</li>
+        </ul>
+        
+        <h2>用户流程</h2>
+        <p>新用户 → 引导页 → 注册/登录 → 个性化设置 → 主页 → 选择冥想 → 冥想体验 → 记录与反馈</p>
+        
+        <h2>界面原型</h2>
+        
+        <div class="screens-container">
+            <!-- 引导页 1 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 100%</span>
+                    </div>
+                    <div class="onboarding-screen">
+                        <div class="onboarding-image">
+                            <!-- 插画：冥想中的人物 -->
+                        </div>
+                        <h3 class="onboarding-title">找到内心的平静</h3>
+                        <p class="onboarding-desc">通过每日冥想，减轻压力，提升专注力，改善睡眠质量</p>
+                        
+                        <div class="onboarding-dots">
+                            <div class="dot active"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        
+                        <div class="onboarding-buttons">
+                            <button class="form-button">下一步</button>
+                            <button class="secondary-button">跳过</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 引导页 2 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 100%</span>
+                    </div>
+                    <div class="onboarding-screen">
+                        <div class="onboarding-image">
+                            <!-- 插画：多种冥想课程 -->
+                        </div>
+                        <h3 class="onboarding-title">丰富的冥想内容</h3>
+                        <p class="onboarding-desc">从初学者到高级冥想者，我们提供适合各种需求的引导式冥想</p>
+                        
+                        <div class="onboarding-dots">
+                            <div class="dot"></div>
+                            <div class="dot active"></div>
+                            <div class="dot"></div>
+                        </div>
+                        
+                        <div class="onboarding-buttons">
+                            <button class="form-button">下一步</button>
+                            <button class="secondary-button">跳过</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 引导页 3 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 100%</span>
+                    </div>
+                    <div class="onboarding-screen">
+                        <div class="onboarding-image">
+                            <!-- 插画：记录与成长 -->
+                        </div>
+                        <h3 class="onboarding-title">记录你的成长</h3>
+                        <p class="onboarding-desc">追踪冥想习惯，解锁成就，见证自己的进步</p>
+                        
+                        <div class="onboarding-dots">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot active"></div>
+                        </div>
+                        
+                        <div class="onboarding-buttons">
+                            <button class="form-button">开始体验</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 注册/登录页 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 100%</span>
+                    </div>
+                    <div class="screen-title">创建账号</div>
+                    <div class="content">
+                        <div class="form-group">
+                            <label class="form-label">电子邮箱</label>
+                            <input type="email" class="form-input" placeholder="请输入您的邮箱">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">密码</label>
+                            <input type="password" class="form-input" placeholder="请设置密码">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">确认密码</label>
+                            <input type="password" class="form-input" placeholder="请再次输入密码">
+                        </div>
+                        
+                        <button class="form-button">注册</button>
+                        
+                        <p style="text-align: center; margin-top: 20px; font-size: 14px;">
+                            已有账号？ <a href="#" style="color: #7c69ef; text-decoration: none;">登录</a>
+                        </p>
+                        
+                        <div style="margin-top: 30px; text-align: center;">
+                            <p style="margin-bottom: 15px; font-size: 14px; color: #777;">或使用以下方式登录</p>
+                            <div style="display: flex; justify-content: center; gap: 20px;">
+                                <div style="width: 40px; height: 40px; border-radius: 20px; background-color: #f0f0f0;"></div>
+                                <div style="width: 40px; height: 40px; border-radius: 20px; background-color: #f0f0f0;"></div>
+                                <div style="width: 40px; height: 40px; border-radius: 20px; background-color: #f0f0f0;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 个性化设置页 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 100%</span>
+                    </div>
+                    <div class="screen-title">个性化设置</div>
+                    <div class="content">
+                        <h3 style="margin-bottom: 20px;">你的冥想目标是什么？</h3>
+                        
+                        <div class="form-group">
+                            <div class="emotion-grid">
+                                <div class="emotion-item">
+                                    <div class="emotion-icon">😌</div>
+                                    <div class="emotion-label">减轻压力</div>
+                                </div>
+                                <div class="emotion-item selected">
+                                    <div class="emotion-icon">😴</div>
+                                    <div class="emotion-label">改善睡眠</div>
+                                </div>
+                                <div class="emotion-item">
+                                    <div class="emotion-icon">🧠</div>
+                                    <div class="emotion-label">提升专注力</div>
+                                </div>
+                                <div class="emotion-item">
+                                    <div class="emotion-icon">😊</div>
+                                    <div class="emotion-label">增强幸福感</div>
+                                </div>
+                                <div class="emotion-item">
+                                    <div class="emotion-icon">❤️</div>
+                                    <div class="emotion-label">自我关爱</div>
+                                </div>
+                                <div class="emotion-item">
+                                    <div class="emotion-icon">🌱</div>
+                                    <div class="emotion-label">个人成长</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin-bottom: 20px;">你的冥想经验如何？</h3>
+                        
+                        <div class="form-group">
+                            <div style="display: flex; gap: 10px;">
+                                <div style="flex: 1; padding: 15px; background-color: #7c69ef; color: white; border-radius: 10px; text-align: center;">
+                                    <p>初学者</p>
+                                </div>
+                                <div style="flex: 1; padding: 15px; background-color: #f0f0f0; border-radius: 10px; text-align: center;">
+                                    <p>有些经验</p>
+                                </div>
+                                <div style="flex: 1; padding: 15px; background-color: #f0f0f0; border-radius: 10px; text-align: center;">
+                                    <p>经验丰富</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin-bottom: 20px;">你希望每天冥想多长时间？</h3>
+                        
+                        <div class="form-group">
+                            <div style="display: flex; gap: 10px;">
+                                <div style="flex: 1; padding: 15px; background-color: #f0f0f0; border-radius: 10px; text-align: center;">
+                                    <p>5分钟</p>
+                                </div>
+                                <div style="flex: 1; padding: 15px; background-color: #7c69ef; color: white; border-radius: 10px; text-align: center;">
+                                    <p>10分钟</p>
+                                </div>
+                                <div style="flex: 1; padding: 15px; background-color: #f0f0f0; border-radius: 10px; text-align: center;">
+                                    <p>15分钟+</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="form-button" style="margin-top: 30px;">完成设置</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 主页 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 100%</span>
+                    </div>
+                    <div class="content">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="margin: 0;">你好，李明</h3>
+                            <div style="width: 40px; height: 40px; border-radius: 20px; background-color: #f0f0f0;"></div>
+                        </div>
+                        
+                        <div class="hero-banner">
+                            <div class="hero-bg"></div>
+                            <div class="hero-content">
+                                <h3>今日冥想</h3>
+                                <p style="margin-bottom: 15px;">放松身心，专注呼吸</p>
+                                <button style="background-color: white; color: #7c69ef; border: none; padding: 8px 15px; border-radius: 20px; font-weight: 500;">开始冥想</button>
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">
+                            <h4>为你推荐</h4>
+                            <a href="#">查看全部</a>
+                        </div>
+                        
+                        <div class="horizontal-scroll">
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">舒缓焦虑</div>
+                                    <div class="meditation-meta">
+                                        <span>10分钟</span>
+                                        <span>初级</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">深度睡眠</div>
+                                    <div class="meditation-meta">
+                                        <span>15分钟</span>
+                                        <span>所有级别</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">晨间能量</div>
+                                    <div class="meditation-meta">
+                                        <span>5分钟</span>
+                                        <span>初级</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">
+                            <h4>冥想分类</h4>
+                            <a href="#">查看全部</a>
+                        </div>
+                        
+                        <div class="horizontal-scroll">
+                            <div class="category-item">
+                                <div class="category-icon"></div>
+                                <div class="category-name">减压放松</div>
+                            </div>
+                            <div class="category-item">
+                                <div class="category-icon"></div>
+                                <div class="category-name">睡眠改善</div>
+                            </div>
+                            <div class="category-item">
+                                <div class="category-icon"></div>
+                                <div class="category-name">专注力</div>
+                            </div>
+                            <div class="category-item">
+                                <div class="category-icon"></div>
+                                <div class="category-name">情绪管理</div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">
+                            <h4>最近练习</h4>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="list-item">
+                                <div class="list-icon"></div>
+                                <div class="list-content">
+                                    <div class="list-title">深度放松</div>
+                                    <div class="list-subtitle">昨天 · 10分钟</div>
+                                </div>
+                                <div class="list-action">▶</div>
+                            </div>
+                            <div class="list-item">
+                                <div class="list-icon"></div>
+                                <div class="list-content">
+                                    <div class="list-title">专注呼吸</div>
+                                    <div class="list-subtitle">3天前 · 5分钟</div>
+                                </div>
+                                <div class="list-action">▶</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-bar">
+                        <div class="tab active">
+                            <div class="tab-icon"></div>
+                            <span>首页</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>发现</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>睡眠</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>统计</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>我的</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 发现页 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 100%</span>
+                    </div>
+                    <div class="screen-title">发现</div>
+                    <div class="content">
+                        <div style="position: relative; margin-bottom: 20px;">
+                            <input type="text" class="form-input" placeholder="搜索冥想内容" style="padding-left: 40px;">
+                            <div style="position: absolute; left: 15px; top: 12px; color: #777;">🔍</div>
+                        </div>
+                        
+                        <div class="section-title">
+                            <h4>热门课程</h4>
+                            <a href="#">查看全部</a>
+                        </div>
+                        
+                        <div class="card" style="background: linear-gradient(135deg, #7c69ef, #5d4adb); color: white; margin-bottom: 20px;">
+                            <h4 style="margin-bottom: 10px;">7天专注力提升挑战</h4>
+                            <p style="font-size: 12px; margin-bottom: 15px; opacity: 0.8;">通过每日练习，培养持久专注力</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 12px;">7节课 · 共70分钟</span>
+                                <button style="background-color: white; color: #7c69ef; border: none; padding: 8px 15px; border-radius: 20px; font-size: 12px; font-weight: 500;">开始</button>
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">
+                            <h4>冥想课程</h4>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon"></div>
+                            <div class="list-content">
+                                <div class="list-title">初学者指南</div>
+                                <div class="list-subtitle">5节课 · 适合初学者</div>
+                            </div>
+                            <div class="list-action">></div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon"></div>
+                            <div class="list-content">
+                                <div class="list-title">压力管理</div>
+                                <div class="list-subtitle">8节课 · 所有级别</div>
+                            </div>
+                            <div class="list-action">></div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon"></div>
+                            <div class="list-content">
+                                <div class="list-title">情绪平衡</div>
+                                <div class="list-subtitle">6节课 · 中级</div>
+                            </div>
+                            <div class="list-action">></div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div class="list-icon"></div>
+                            <div class="list-content">
+                                <div class="list-title">正念生活</div>
+                                <div class="list-subtitle">10节课 · 所有级别</div>
+                            </div>
+                            <div class="list-action">></div>
+                        </div>
+                        
+                        <div class="section-title">
+                            <h4>单次冥想</h4>
+                            <a href="#">查看全部</a>
+                        </div>
+                        
+                        <div class="horizontal-scroll">
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">快速减压</div>
+                                    <div class="meditation-meta">
+                                        <span>5分钟</span>
+                                        <span>所有级别</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">身体扫描</div>
+                                    <div class="meditation-meta">
+                                        <span>10分钟</span>
+                                        <span>初级</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">感恩冥想</div>
+                                    <div class="meditation-meta">
+                                        <span>15分钟</span>
+                                        <span>所有级别</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-bar">
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>首页</span>
+                        </div>
+                        <div class="tab active">
+                            <div class="tab-icon"></div>
+                            <span>发现</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>睡眠</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>统计</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>我的</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 睡眠页 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 100%</span>
+                    </div>
+                    <div class="screen-title">睡眠</div>
+                    <div class="content">
+                        <div class="hero-banner" style="height: 180px;">
+                            <div class="hero-bg"></div>
+                            <div class="hero-content">
+                                <h3>今晚好眠</h3>
+                                <p style="margin-bottom: 15px;">放松身心，迎接深度睡眠</p>
+                                <button style="background-color: white; color: #7c69ef; border: none; padding: 8px 15px; border-radius: 20px; font-weight: 500;">开始</button>
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">
+                            <h4>睡眠故事</h4>
+                            <a href="#">查看全部</a>
+                        </div>
+                        
+                        <div class="horizontal-scroll">
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">森林漫步</div>
+                                    <div class="meditation-meta">
+                                        <span>20分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">海边日落</div>
+                                    <div class="meditation-meta">
+                                        <span>15分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">星空之旅</div>
+                                    <div class="meditation-meta">
+                                        <span>25分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">
+                            <h4>睡眠音乐</h4>
+                            <a href="#">查看全部</a>
+                        </div>
+                        
+                        <div class="horizontal-scroll">
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">轻柔钢琴曲</div>
+                                    <div class="meditation-meta">
+                                        <span>30分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">自然雨声</div>
+                                    <div class="meditation-meta">
+                                        <span>60分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">白噪音</div>
+                                    <div class="meditation-meta">
+                                        <span>循环播放</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">
+                            <h4>睡前冥想</h4>
+                            <a href="#">查看全部</a>
+                        </div>
+                        
+                        <div class="horizontal-scroll">
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">放下一天</div>
+                                    <div class="meditation-meta">
+                                        <span>10分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">身体放松</div>
+                                    <div class="meditation-meta">
+                                        <span>15分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">安宁入睡</div>
+                                    <div class="meditation-meta">
+                                        <span>20分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card" style="margin-top: 20px;">
+                            <h4 style="margin-bottom: 10px;">睡眠提醒</h4>
+                            <p style="font-size: 12px; color: #777; margin-bottom: 15px;">设置提醒，养成健康的睡眠习惯</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>每晚 10:30</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-bar">
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>首页</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>发现</span>
+                        </div>
+                        <div class="tab active">
+                            <div class="tab-icon"></div>
+                            <span>睡眠</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>统计</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>我的</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 统计页 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 100%</span>
+                    </div>
+                    <div class="screen-title">统计</div>
+                    <div class="content">
+                        <div class="card">
+                            <div class="section-title">
+                                <h4>本周概览</h4>
+                                <a href="#">月度</a>
+                            </div>
+                            
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-value">5</div>
+                                    <div class="stat-label">冥想次数</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">45</div>
+                                    <div class="stat-label">冥想分钟</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">3</div>
+                                    <div class="stat-label">连续天数</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">9</div>
+                                    <div class="stat-label">总天数</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="section-title">
+                                <h4>冥想日历</h4>
+                                <a href="#">4月</a>
+                            </div>
+                            
+                            <div class="streak-calendar">
+                                <div class="calendar-day">1</div>
+                                <div class="calendar-day">2</div>
+                                <div class="calendar-day active">3</div>
+                                <div class="calendar-day">4</div>
+                                <div class="calendar-day active">5</div>
+                                <div class="calendar-day active">6</div>
+                                <div class="calendar-day">7</div>
+                                <div class="calendar-day active">8</div>
+                                <div class="calendar-day active">9</div>
+                                <div class="calendar-day">10</div>
+                                <div class="calendar-day active">11</div>
+                                <div class="calendar-day active">12</div>
+                                <div class="calendar-day active">13</div>
+                                <div class="calendar-day">14</div>
+                                <div class="calendar-day active">15</div>
+                                <div class="calendar-day">16</div>
+                                <div class="calendar-day active">17</div>
+                                <div class="calendar-day active">18</div>
+                                <div class="calendar-day">19</div>
+                                <div class="calendar-day active">20</div>
+                                <div class="calendar-day">21</div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">
+                            <h4>成就</h4>
+                            <a href="#">查看全部</a>
+                        </div>
+                        
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🔥</div>
+                            <div class="achievement-info">
+                                <div class="achievement-title">坚持不懈</div>
+                                <div class="achievement-desc">连续冥想3天</div>
+                            </div>
+                        </div>
+                        
+                        <div class="achievement-card">
+                            <div class="achievement-icon">⏱️</div>
+                            <div class="achievement-info">
+                                <div class="achievement-title">时间管理大师</div>
+                                <div class="achievement-desc">累计冥想时间达到1小时</div>
+                            </div>
+                        </div>
+                        
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🌙</div>
+                            <div class="achievement-info">
+                                <div class="achievement-title">睡眠探索者</div>
+                                <div class="achievement-desc">尝试3种不同的睡眠内容</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-bar">
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>首页</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>发现</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>睡眠</span>
+                        </div>
+                        <div class="tab active">
+                            <div class="tab-icon"></div>
+                            <span>统计</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>我的</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 我的页面 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 100%</span>
+                    </div>
+                    <div class="screen-title">我的</div>
+                    <div class="content">
+                        <div style="display: flex; align-items: center; margin-bottom: 30px;">
+                            <div style="width: 70px; height: 70px; border-radius: 35px; background-color: #f0f0f0; margin-right: 15px;"></div>
+                            <div>
+                                <h3 style="margin-bottom: 5px;">李明</h3>
+                                <p style="font-size: 14px; color: #777;">冥想初学者</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="list-item">
+                                <div class="list-icon" style="background-color: #7c69ef; color: white;">🎯</div>
+                                <div class="list-content">
+                                    <div class="list-title">我的目标</div>
+                                    <div class="list-subtitle">设置和管理你的冥想目标</div>
+                                </div>
+                                <div class="list-action">></div>
+                            </div>
+                            
+                            <div class="list-item">
+                                <div class="list-icon" style="background-color: #7c69ef; color: white;">🏆</div>
+                                <div class="list-content">
+                                    <div class="list-title">我的成就</div>
+                                    <div class="list-subtitle">查看你获得的所有成就</div>
+                                </div>
+                                <div class="list-action">></div>
+                            </div>
+                            
+                            <div class="list-item">
+                                <div class="list-icon" style="background-color: #7c69ef; color: white;">❤️</div>
+                                <div class="list-content">
+                                    <div class="list-title">我的收藏</div>
+                                    <div class="list-subtitle">你收藏的冥想内容</div>
+                                </div>
+                                <div class="list-action">></div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">
+                            <h4>设置</h4>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="setting-item">
+                                <div class="setting-label">提醒</div>
+                                <div class="list-action">></div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-label">通知</div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-label">下载设置</div>
+                                <div class="list-action">></div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-label">账号与安全</div>
+                                <div class="list-action">></div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-label">隐私政策</div>
+                                <div class="list-action">></div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-label">关于我们</div>
+                                <div class="list-action">></div>
+                            </div>
+                        </div>
+                        
+                        <button class="secondary-button" style="margin-top: 30px;">退出登录</button>
+                    </div>
+                    
+                    <div class="tab-bar">
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>首页</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>发现</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>睡眠</span>
+                        </div>
+                        <div class="tab">
+                            <div class="tab-icon"></div>
+                            <span>统计</span>
+                        </div>
+                        <div class="tab active">
+                            <div class="tab-icon"></div>
+                            <span>我的</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 情绪检测页 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 100%</span>
+                    </div>
+                    <div class="screen-title">今日情绪</div>
+                    <div class="content">
+                        <h3 style="margin-bottom: 20px; text-align: center;">你今天感觉如何？</h3>
+                        
+                        <div class="emotion-grid">
+                            <div class="emotion-item">
+                                <div class="emotion-icon">😊</div>
+                                <div class="emotion-label">平静</div>
+                            </div>
+                            <div class="emotion-item selected">
+                                <div class="emotion-icon">😌</div>
+                                <div class="emotion-label">放松</div>
+                            </div>
+                            <div class="emotion-item">
+                                <div class="emotion-icon">😃</div>
+                                <div class="emotion-label">快乐</div>
+                            </div>
+                            <div class="emotion-item">
+                                <div class="emotion-icon">😔</div>
+                                <div class="emotion-label">低落</div>
+                            </div>
+                            <div class="emotion-item">
+                                <div class="emotion-icon">😓</div>
+                                <div class="emotion-label">焦虑</div>
+                            </div>
+                            <div class="emotion-item">
+                                <div class="emotion-icon">😴</div>
+                                <div class="emotion-label">疲惫</div>
+                            </div>
+                            <div class="emotion-item">
+                                <div class="emotion-icon">😤</div>
+                                <div class="emotion-label">压力大</div>
+                            </div>
+                            <div class="emotion-item">
+                                <div class="emotion-icon">😐</div>
+                                <div class="emotion-label">平淡</div>
+                            </div>
+                            <div class="emotion-item">
+                                <div class="emotion-icon">🤔</div>
+                                <div class="emotion-label">思考</div>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin: 30px 0 15px;">为你推荐</h3>
+                        
+                        <div class="card" style="background: linear-gradient(135deg, #7c69ef, #5d4adb); color: white; margin-bottom: 20px;">
+                            <h4 style="margin-bottom: 10px;">放松冥想</h4>
+                            <p style="font-size: 12px; margin-bottom: 15px; opacity: 0.8;">基于你的情绪状态，我们推荐这个冥想练习</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 12px;">10分钟 · 初级</span>
+                                <button style="background-color: white; color: #7c69ef; border: none; padding: 8px 15px; border-radius: 20px; font-size: 12px; font-weight: 500;">开始</button>
+                            </div>
+                        </div>
+                        
+                        <div class="horizontal-scroll">
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">深呼吸练习</div>
+                                    <div class="meditation-meta">
+                                        <span>5分钟</span>
+                                        <span>初级</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">身心放松</div>
+                                    <div class="meditation-meta">
+                                        <span>15分钟</span>
+                                        <span>中级</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="meditation-item">
+                                <div class="meditation-img"></div>
+                                <div class="meditation-info">
+                                    <div class="meditation-title">感恩冥想</div>
+                                    <div class="meditation-meta">
+                                        <span>10分钟</span>
+                                        <span>所有级别</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="form-button" style="margin-top: 30px;">保存今日情绪</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 冥想播放页 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="player-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>📶 100%</span>
+                        </div>
+                        
+                        <div style="padding: 15px;">
+                            <div style="text-align: left;">
+                                <span style="font-size: 24px;">↓</span>
+                            </div>
+                        </div>
+                        
+                        <div class="player-header">
+                            <div class="player-title">深度放松</div>
+                            <div class="player-subtitle">引导式冥想 · 10分钟</div>
+                        </div>
+                        
+                        <div class="player-image">
+                            <!-- 冥想图像 -->
+                            <div style="font-size: 40px;">🧘</div>
+                        </div>
+                        
+                        <div class="player-controls">
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                            
+                            <div class="time-display">
+                                <span>3:05</span>
+                                <span>10:00</span>
+                            </div>
+                            
+                            <div class="control-buttons">
+                                <div class="control-button">
+                                    <span style="font-size: 18px;">⏮</span>
+                                </div>
+                                <div class="control-button">
+                                    <span style="font-size: 18px;">-15</span>
+                                </div>
+                                <div class="control-button play-button">
+                                    <span style="font-size: 24px;">⏸</span>
+                                </div>
+                                <div class="control-button">
+                                    <span style="font-size: 18px;">+15</span>
+                                </div>
+                                <div class="control-button">
+                                    <span style="font-size: 18px;">⏭</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 冥想完成页 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 100%</span>
+                    </div>
+                    <div class="content" style="text-align: center; padding-top: 50px;">
+                        <div style="width: 100px; height: 100px; background-color: #7c69ef; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px; color: white; font-size: 40px;">
+                            ✓
+                        </div>
+                        
+                        <h2 style="margin-bottom: 15px;">冥想完成</h2>
+                        <p style="color: #777; margin-bottom: 30px;">你已完成10分钟的深度放松冥想</p>
+                        
+                        <div class="card" style="text-align: left; margin-bottom: 30px;">
+                            <h4 style="margin-bottom: 15px;">今日成就</h4>
+                            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                <div style="width: 40px; height: 40px; border-radius: 20px; background-color: #7c69ef; color: white; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                    🔥
+                                </div>
+                                <div>
+                                    <div style="font-weight: 500; margin-bottom: 3px;">连续冥想3天</div>
+                                    <div style="font-size: 12px; color: #777;">继续保持！</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 40px; height: 40px; border-radius: 20px; background-color: #7c69ef; color: white; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                    ⏱️
+                                </div>
+                                <div>
+                                    <div style="font-weight: 500; margin-bottom: 3px;">累计冥想45分钟</div>
+                                    <div style="font-size: 12px; color: #777;">距离下一个成就还有15分钟</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin-bottom: 15px;">感受如何？</h3>
+                        
+                        <div class="emotion-grid" style="margin-bottom: 30px;">
+                            <div class="emotion-item">
+                                <div class="emotion-icon">😊</div>
+                                <div class="emotion-label">平静</div>
+                            </div>
+                            <div class="emotion-item selected">
+                                <div class="emotion-icon">😌</div>
+                                <div class="emotion-label">放松</div>
+                            </div>
+                            <div class="emotion-item">
+                                <div class="emotion-icon">😃</div>
+                                <div class="emotion-label">愉悦</div>
+                            </div>
+                        </div>
+                        
+                        <button class="form-button">保存并返回</button>
+                        <button class="secondary-button" style="margin-top: 15px;">分享成就</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 冥想提醒设置页 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 100%</span>
+                    </div>
+                    <div class="screen-title">冥想提醒</div>
+                    <div class="content">
+                        <div class="card">
+                            <div class="setting-item">
+                                <div class="setting-label">启用提醒</div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-label">提醒时间</div>
+                                <div>08:00</div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-label">重复</div>
+                                <div>每天</div>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin: 30px 0 15px;">添加新提醒</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">时间</label>
+                            <input type="time" class="form-input" value="20:00">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">重复</label>
+                            <select class="form-input">
+                                <option>每天</option>
+                                <option>工作日</option>
+                                <option>周末</option>
+                                <option>自定义</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">提醒标签</label>
+                            <input type="text" class="form-input" placeholder="例如：晚间冥想">
+                        </div>
+                        
+                        <button class="form-button">保存提醒</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 冥想目标设置页 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 100%</span>
+                    </div>
+                    <div class="screen-title">冥想目标</div>
+                    <div class="content">
+                        <div class="card">
+                            <h4 style="margin-bottom: 15px;">当前目标</h4>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-value">每日</div>
+                                    <div class="stat-label">频率</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">10</div>
+                                    <div class="stat-label">分钟/次</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin: 30px 0 15px;">修改目标</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">冥想频率</label>
+                            <select class="form-input">
+                                <option>每日</option>
+                                <option>每周5次</option>
+                                <option>每周3次</option>
+                                <option>自定义</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">每次时长</label>
+                            <div style="display: flex; gap: 10px;">
+                                <div style="flex: 1; padding: 15px; background-color: #f0f0f0; border-radius: 10px; text-align: center;">
+                                    <p>5分钟</p>
+                                </div>
+                                <div style="flex: 1; padding: 15px; background-color: #7c69ef; color: white; border-radius: 10px; text-align: center;">
+                                    <p>10分钟</p>
+                                </div>
+                                <div style="flex: 1; padding: 15px; background-color: #f0f0f0; border-radius: 10px; text-align: center;">
+                                    <p>15分钟</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">冥想目标</label>
+                            <div class="emotion-grid">
+                                <div class="emotion-item">
+                                    <div class="emotion-icon">😌</div>
+                                    <div class="emotion-label">减轻压力</div>
+                                </div>
+                                <div class="emotion-item selected">
+                                    <div class="emotion-icon">😴</div>
+                                    <div class="emotion-label">改善睡眠</div>
+                                </div>
+                                <div class="emotion-item">
+                                    <div class="emotion-icon">🧠</div>
+                                    <div class="emotion-label">提升专注力</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="form-button">保存目标</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 课程详情页 -->
+            <div class="screen">
+                <div class="screen-content">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 100%</span>
+                    </div>
+                    <div style="padding: 15px;">
+                        <div style="text-align: left;">
+                            <span style="font-size: 24px;">←</span>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div style="height: 180px; background: linear-gradient(135deg, #7c69ef, #5d4adb); border-radius: 15px; margin-bottom: 20px;"></div>
+                        
+                        <h2 style="margin-bottom: 10px;">7天专注力提升挑战</h2>
+                        <p style="color: #777; margin-bottom: 20px;">通过每日练习，培养持久专注力</p>
+                        
+                        <div style="display: flex; gap: 15px; margin-bottom: 30px;">
+                            <div style="flex: 1; text-align: center;">
+                                <div style="font-weight: 600; margin-bottom: 5px;">7</div>
+                                <div style="font-size: 12px; color: #777;">课程</div>
+                            </div>
+                            <div style="flex: 1; text-align: center;">
+                                <div style="font-weight: 600; margin-bottom: 5px;">70</div>
+                                <div style="font-size: 12px; color: #777;">分钟</div>
+                            </div>
+                            <div style="flex: 1; text-align: center;">
+                                <div style="font-weight: 600; margin-bottom: 5px;">所有级别</div>
+                                <div style="font-size: 12px; color: #777;">难度</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h4 style="margin-bottom: 15px;">课程介绍</h4>
+                            <p style="font-size: 14px; line-height: 1.6; margin-bottom: 15px;">
+                                这个为期7天的挑战旨在帮助你培养持久的专注力。每天的练习都会引导你逐步提升注意力，减少分心，增强心智清晰度。
+                            </p>
+                            <p style="font-size: 14px; line-height: 1.6;">
+                                无论你是想在工作中更加高效，还是希望在日常生活中更加专注，这个系列都能帮助你建立坚实的冥想基础。
+                            </p>
+                        </div>
+                        
+                        <h3 style="margin: 30px 0 15px;">课程内容</h3>
+                        
+                        <div class="list-item">
+                            <div style="width: 24px; height: 24px; border-radius: 12px; background-color: #7c69ef; color: white; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                1
+                            </div>
+                            <div class="list-content">
+                                <div class="list-title">专注基础</div>
+                                <div class="list-subtitle">10分钟 · 已完成</div>
+                            </div>
+                            <div class="list-action">✓</div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div style="width: 24px; height: 24px; border-radius: 12px; background-color: #7c69ef; color: white; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                2
+                            </div>
+                            <div class="list-content">
+                                <div class="list-title">呼吸锚定</div>
+                                <div class="list-subtitle">10分钟</div>
+                            </div>
+                            <div class="list-action">▶</div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div style="width: 24px; height: 24px; border-radius: 12px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                3
+                            </div>
+                            <div class="list-content">
+                                <div class="list-title">身体扫描</div>
+                                <div class="list-subtitle">10分钟</div>
+                            </div>
+                            <div class="list-action">🔒</div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div style="width: 24px; height: 24px; border-radius: 12px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                4
+                            </div>
+                            <div class="list-content">
+                                <div class="list-title">观察思绪</div>
+                                <div class="list-subtitle">10分钟</div>
+                            </div>
+                            <div class="list-action">🔒</div>
+                        </div>
+                        
+                        <div class="list-item">
+                            <div style="width: 24px; height: 24px; border-radius: 12px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                5
+                            </div>
+                            <div class="list-content">
+                                <div class="list-title">专注训练</div>
+                                <div class="list-subtitle">10分钟</div>
+                            </div>
+                            <div class="list-action">🔒</div>
+                        </div>
+                        
+                        <button class="form-button" style="margin-top: 30px;">继续挑战</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
