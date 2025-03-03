@@ -12,6 +12,9 @@
 ├── midjourney/      # AI图像生成工具
 ├── stable_diffusion/# 开源AI图像生成工具
 ├── notion_ai/       # Notion集成AI助手
+├── napkin_ai/       # AI手绘转设计工具
+├── ideogram_ai/     # AI文字艺术设计工具
+├── gamma/           # AI演示文档工具
 └── README.md        # 本文件
 ```
 
@@ -36,6 +39,9 @@
 | Midjourney | Midjourney | 艺术图像生成 | 需Discord | 10美元/月起 |
 | Stable Diffusion | Stability AI | 开源图像生成 | 无 | 开源免费 |
 | Notion AI | Notion | 文档创作助手 | 需Notion账号 | 随订阅付费 |
+| Napkin AI | Napkin | 手绘转设计 | 无 | 免费/付费 |
+| Ideogram AI | Ideogram | 文字艺术设计 | 无 | 免费/付费 |
+| Gamma | Gamma | 演示文档创作 | 无 | 免费/付费 |
 
 ## 选择建议
 
@@ -55,6 +61,8 @@
 4. **文档创作**
    - 团队协作：Notion AI
    - 个人使用：基础编辑器+AI插件
+   - 演示文稿：Gamma
+   - 设计创意：Napkin AI、Ideogram AI
 
 ### 付费建议
 1. **个人用户**
