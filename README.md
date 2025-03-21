@@ -29,6 +29,11 @@
 │   ├── napkin_ai/   # AI手绘转设计工具
 │   ├── ideogram_ai/ # AI文字艺术设计工具
 │   └── gamma/       # AI演示文档工具
+├── L3-WorkFlow/    # AI工作流框架目录
+│   ├── langchain/  # LangChain框架
+│   ├── fastgpt/    # FastGPT框架
+│   ├── flowise/    # Flowise可视化工作流
+│   └── haystack/   # Haystack NLP框架
 └── README.md        # 本文件
 ```
 
@@ -67,8 +72,8 @@
 #### 开发工具
 - 代码编辑器：Cursor
 - 代码补全：GitHub Copilot、Codeium
-- 应用开发：Coze、Dify
 - 知识库构建：FastGPT
+- AI工作流：参考 L3-WorkFlow 目录
 
 #### 创意工具
 - 图像生成：Midjourney（商用）、Stable Diffusion（开源）
@@ -82,7 +87,7 @@
    - 基础对话：国内免费LLM
    - 代码开发：Codeium
    - 图像生成：Stable Diffusion
-   - 知识库：自建FastGPT
+   - AI工作流：参考 L3-WorkFlow 目录下的开源方案
    - 文档创作：Gamma免费版
    - 设计创意：Napkin AI、Ideogram AI免费版
 
@@ -97,6 +102,8 @@
 ### 企业用户
 1. **中小企业**
    - 混合使用免费和基础版服务
+   - 使用LangChain构建自定义AI应用
+   - 使用FastGPT搭建企业知识库
    - 按需选择专业版功能
    - 可自建知识库系统
 
@@ -149,3 +156,21 @@
   - 支持多种 LLM 模型接入
   - 可配置提示词模板
   - 参数动态调整
+
+## AI工作流框架概述
+
+### 框架分类
+1. **开发框架类**
+   - 面向开发者的完整开发框架
+   - 提供灵活的定制能力
+   
+2. **低代码平台类**
+   - 可视化开发工具
+   - 快速应用构建平台
+
+3. **垂直应用类**
+   - 特定场景的专业解决方案
+   - 开箱即用的功能组件
+
+### 详细信息
+更多框架详情和对比分析，请参考 [L3-WorkFlow](./L3-WorkFlow/README.md) 目录。
