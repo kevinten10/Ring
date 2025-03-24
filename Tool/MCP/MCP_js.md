@@ -1,114 +1,151 @@
-# MCP JS工具使用指南
+# MCP JS 工具使用指南
 
-## 1. 概述
-MCP (Model-Controller-Pipeline) 是Cursor IDE中的一个强大工具，用于构建和运行JS服务。本指南将帮助你从零开始搭建和使用MCP工具。
+## 1. 简介
 
-## 2. 环境准备
+MCP (Model-Controller-Pipeline) 是 Cursor IDE 中的一个强大工具，专门用于构建和运行 JavaScript 服务。本指南将帮助你从零开始掌握 MCP 工具的使用。
 
-### 2.1 必要工具安装
-1. npm工具安装
+## 2. 环境配置
 
-2. pnpm安装
+### 2.1 前置要求
+
+在 Windows 系统上，你需要安装以下工具：
+
+1. **Node.js**
+   - 使用官方 MSI 安装包安装
+   - 安装完成后会自动包含 npm
+
+2. **pnpm** (可选)
+   ```powershell
+   Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression
+   ```
+
+3. **查看 Node.js 全局安装路径**
+   ```bash
+   npm list --global
+   ```
+   > 记录此路径，后续配置需要用到
+
+### 2.2 安装 MCP 服务
 
 ```bash
-Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression
+npm install -g @xxxx/xxx-mcp-server
 ```
 
-2. nodejs工具安装
+### 2.3 Cursor 配置
 
-### 2.2 项目初始化 
+在 Cursor 中配置 MCP 工具，需要使用绝对路径：
 
-## 3. 开发流程
- 
-### 3.1 拉取代码
-
-克隆代码库
-
-### 3.2 依赖管理
-```bash
-# 安装项目依赖
-npm install 
+```json
+{
+    "playwright": {
+        "command": "D:\\Users\\xxx\\Nodejs\\node.exe",
+        "args": [
+            "D:\\Users\\xxx\\AppData\\Roaming\\npm\\node_modules\\@executeautomation\\playwright-mcp-server\\dist\\index.js",
+            "-y",
+            "@smithery/cli@latest",
+            "run",
+            "@executeautomation/playwright-mcp-server",
+            "--config",
+            "\"{}\""
+        ]
+    }
+}
 ```
 
-## 4. 测试与部署
+> 注意：请将路径替换为你的实际安装路径
 
-### 4.1 本地测试
-在部署到Cursor之前，建议先在终端中测试：
+## 3. 项目开发流程
 
+### 3.1 项目初始化
+1. 克隆项目代码
+2. 安装依赖：
+   ```bash
+   npm install
+   ```
+
+### 3.2 本地测试
+在部署到 Cursor 前，建议在本地测试：
 ```bash
+# 构建项目
 npm run build
 
+# 启动服务
 npm start
 ```
 
-### 4.2 Cursor配置
-1. 在Cursor中配置MCP server
-2. 确认配置状态（绿色表示成功）
+### 3.3 调试技巧
+1. 使用命令行直接启动服务进行调试
+2. 通过 Cursor 的 MCP 日志查看详细错误信息
+3. 使用以下命令验证服务：
+   ```bash
+   node {项目路径}/dist/index.js
+   ```
 
-```bash
-node {ABSOLUTE PATH TO FILE HERE}/dist/index.js
-```
+## 4. 最佳实践
 
-## 5. 最佳实践
+### 4.1 文档管理
+- 维护清晰的 README 文档
+- 记录 API 接口文档
+- 保持更新变更日志
+- 使用 Markdown 记录执行流程
 
-### 5.1 项目文档管理
-- 在Notepad中记录执行流程
-- 创建清晰的README文档
-- 记录API接口文档
-- 维护变更日志
+### 4.2 执行流程示例
 
-执行流程示例：
 ```markdown
-现在，我需要你执行一个分析应用调用链路的任务，你可以使用 appinvoke 这个MCP工具。
+# 应用调用链路分析任务
 
-### 执行链路
+## 执行步骤
+1. 输入初始 appid，获取依赖服务
+2. 分析依赖服务的下级依赖
+3. 记录已扫描服务，避免重复分析
 
-1. 我会给你1个原始的appid，你需要获取它依赖的服务，记录好相关数据
-2. 根据它依赖的服务，你需要进行进一步搜索，分析它们所依赖的链路
-3. 你需要记忆已经获取过的服务，如果1个服务依赖了已经扫描过的服务，你应该基于之前的数据，而不是重新获取它的数据，这可能会导致循环依赖
+## 文档规范
+工作目录：Python/appinvoke/analysis1
+- 为每个 appid 创建分析报告
+- 在 route 文档中更新依赖关系
+- 生成完整调用关系图示
 
-### 文档要求
-
-工作目录：Python/appinvoke/analysis1 
-
-1. 在每次分析完一个appid时，你应该在工作目录下，创建这个appid的分析报告
-2. 在每次分析调用链路时，你应该在 route 文档中，更新依赖关系
-3. 在全部分析完成后，你应该产出完整的调用关系说明和图示
-
-### 其他要求
-
-1. 依赖层级最多扫描10层，避免过深
-2. 有些公共服务，无需进一步分析，例如
-    1. log
-    2. db
-    3. search
+## 注意事项
+- 依赖扫描最多 10 层
+- 跳过公共服务分析（如：log、db、search）
 ```
 
-### 5.2 自动化执行
-1. 使用Agent的YOLO模式实现自动执行
-2. 设置合适的执行参数
-3. 监控执行过程
+### 4.3 可视化工具推荐
+1. [Mermaid Live Editor](https://mermaid-js.github.io/mermaid-live-editor)
+   - 用途：生成流程图
+   - 特点：支持多种图表类型
 
-### 5.3 结果分析与可视化
-推荐工具：
-1. [Mermaid Live Editor](https://mermaid-js.github.io/mermaid-live-editor) - 流程图绘制
-2. [Napkin](https://app.napkin.ai) - 思维导图制作
+2. [Napkin](https://app.napkin.ai)
+   - 用途：制作思维导图
+   - 特点：界面直观，易于使用
 
-## 6. 常见问题处理
-1. 启动失败排查
+## 5. 故障排查
+
+### 5.1 常见问题
+1. **启动失败**
    - 检查依赖是否完整安装
-   - 验证路径配置是否正确
-   - 查看终端错误日志
+   - 验证配置文件中的路径
+   - 查看错误日志
 
-2. 性能优化建议
-   - 控制依赖层级（建议不超过10层）
+2. **性能问题**
+   - 控制依赖层级（≤10层）
    - 避免循环依赖
-   - 合理使用缓存机制
+   - 合理使用缓存
 
-## 7. 参考资源
+### 5.2 优化建议
+- 定期更新依赖包
+- 使用 TypeScript 提高代码质量
+- 实现自动化测试
+
+## 6. 参考资源
+
 - [MCP Server for Cursor 官方文档](https://aibook.ren/archives/mcp-server-for-cursor)
-- 项目示例和模板
-- 常见问题解答
+- [Windows 使用教程](https://medium.com/@sayharer/vscode-cline%E6%8F%92%E4%BB%B6%E9%83%A8%E7%BD%B2mcp-server-win%E7%B3%BB%E7%BB%9F-b079c3d254dc)
+- [GitHub Issues](https://github.com/cline/cline/issues/1948)
 
-## 8. 更新日志
-记录文档的重要更新和变更... 
+## 7. 更新日志
+
+### v1.0.0 (2024-03-21)
+- 初始版本发布
+- 完善环境配置说明
+- 添加最佳实践指南
